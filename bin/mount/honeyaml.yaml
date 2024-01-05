@@ -1,0 +1,20 @@
+honeywire:
+  kind: response-code
+  enabled: true
+  name: status-code-admin-path
+  description: Returns @value instead of the original status code when @path is requested
+  operations:
+    - op: replace-status-code
+      value: 200
+      condition:
+        - path: /admin
+---
+honeywire:
+  kind: http-header
+  enabled: true
+  name: http-header-server-replace
+  description: Changes the Server attribute of @key to @value if the key exists.
+  operations:
+    - op: replace-inplace
+      key: Server
+      value: "Apache/1.0.3 (Debian)"

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: deception-persistent-volume
+  labels:
+    app.kubernetes.io/name: persistent-volume
+    app.kubernetes.io/part-of: deception
+spec:
+  capacity:
+    storage: 1Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  hostPath:
+    path: "/opt/deceptionVolume"

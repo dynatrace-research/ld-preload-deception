@@ -1,0 +1,7 @@
+mvnw  eol=lf
+*.sh  eol=lf
+
+*.so  binary
+*.a   binary
+
+*.ipynb linguist-documentation=true

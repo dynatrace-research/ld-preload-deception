@@ -1,0 +1,37 @@
+apiVersion: skaffold/v3alpha1
+kind: Config
+metadata:
+  name: deception
+build:
+  artifacts:
+    # Building the images with @dockefile within the @context folder
+    - image: deception-python-webhook-dev
+      context: ./src/webhook
+      docker:
+        dockerfile: ./Dockerfile
+  local:
+    # only the docker CLI respects a manually logged-in daemon
+    useDockerCLI: true
+    # BuildKit provides an improvement on performance
+    useBuildkit: true
+deploy:
+  # deploy artifacts using kubectl
+  kubectl:
+    {}
+
+profiles:
+  - name: deception-dev-namespace
+    manifests:
+      kustomize:
+        paths:
+          - ./k8s-manifests/base/test-deployment/namespace
+  - name: kind-webhook
+    manifests:
+      kustomize:
+        paths:
+          - ./k8s-manifests/localdev/webhook
+  - name: aws-webhook
+    manifests:
+      kustomize:
+        paths:
+          - ./k8s-manifests/cloud-service-provider/aws/webhook-environment

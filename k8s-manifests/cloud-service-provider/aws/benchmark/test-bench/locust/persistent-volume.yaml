@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: benchmark-deception-performance-data-persistent-volume
+  labels:
+    app.kubernetes.io/name: performance-data-persistent-volume
+    app.kubernetes.io/part-of: benchmark-deception
+spec:
+  capacity:
+    storage: 100Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: "efs-storage-class"
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: <fs-id>

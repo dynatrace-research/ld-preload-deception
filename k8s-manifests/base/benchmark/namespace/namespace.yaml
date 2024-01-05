@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: deception
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: benchmark-deception-sut-with
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: benchmark-deception-sut-without

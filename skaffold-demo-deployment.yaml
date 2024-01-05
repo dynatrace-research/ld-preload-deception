@@ -1,0 +1,35 @@
+apiVersion: skaffold/v3alpha1
+kind: Config
+metadata:
+  name: deception
+build:
+  artifacts:
+    # Building the images with @dockefile within the @context folder
+    - image: deception-sut-worst-case-java
+      context: ./benchmark/system-under-test/worst-case/java
+      docker:
+        dockerfile: Dockerfile
+    - image: deception-sut-worst-case-python
+      context: ./benchmark/system-under-test/worst-case/python
+      docker:
+        dockerfile: Dockerfile
+    - image: deception-tb-locust
+      context: ./benchmark/test-bench/locust
+      docker:
+        dockerfile: Dockerfile
+  local:
+    # only the docker CLI respects a manually logged-in daemon
+    useDockerCLI: true
+    # BuildKit provides an improvement on performance
+    useBuildkit: true
+deploy:
+  # deploy artifacts using kubectl
+  kubectl:
+    {}
+
+profiles:
+  - name: deploy-all
+    manifests:
+      kustomize:
+        paths:
+          - ./k8s-manifests/base/test-deployment/deployment

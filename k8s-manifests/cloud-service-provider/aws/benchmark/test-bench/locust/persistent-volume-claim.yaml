@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: benchmark-deception-performance-data-persistent-volume-claim
+  namespace: deception
+  labels:
+    app.kubernetes.io/name: performance-data-persistent-volume-claim
+    app.kubernetes.io/part-of: benchmark-deception
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "efs-storage-class"
+  resources:
+    requests:
+      storage: 100Mi
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: performance-data-persistent-volume
+      app.kubernetes.io/part-of: benchmark-deception

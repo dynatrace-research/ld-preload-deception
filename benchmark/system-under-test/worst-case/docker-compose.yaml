@@ -1,0 +1,74 @@
+version: '2'
+
+services:
+  # Webhook: only needed for building cloud deployment
+  deception-webhook:
+    image: benchmark-deception-webhook
+    build:
+      context: ../../../src/webhook
+      dockerfile: Dockerfile
+    container_name: benchmark-deception-webhook
+    volumes:
+      - ../../../src/webhook/webhook.crt:/certs/webhook.crt
+      - ../../../src/webhook/webhook.key:/certs/webhook.key
+
+  # SUT: java worst case
+  sut-java-worst-case-without:
+    image: benchmark-sut-worst-case-java
+    build:
+      context: ../../../benchmark/system-under-test/worst-case/java
+      dockerfile: Dockerfile
+    container_name: benchmark-sut-worst-case-java-without-ldpreload
+    ports:
+     - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+  sut-java-worst-case-with:
+    image: benchmark-sut-worst-case-java
+    container_name: benchmark-sut-worst-case-java-with-ldpreload
+    ports:
+     - "8081:8081"
+    environment:
+      - SERVER_PORT=8081
+      - LD_PRELOAD=/opt/deception/deception.so
+    volumes:
+      - ../../../bin/mount/deception.so:/opt/deception/deception.so
+      - ../../../bin/mount/honeyaml.yaml:/var/opt/honeyaml.yaml
+
+  # SUT: python worst case
+  sut-python-worst-case-without:
+    image: benchmark-sut-worst-case-python
+    build:
+      context: ../../../benchmark/system-under-test/worst-case/python
+      dockerfile: Dockerfile
+    container_name: benchmark-sut-worst-case-python-without-ldpreload
+    ports:
+     - "8082:8082"
+    environment:
+      - FLASK_RUN_PORT=8082
+  sut-python-worst-case-with:
+    image: benchmark-sut-worst-case-python
+    container_name: benchmark-sut-worst-case-python-with-ldpreload
+    ports:
+     - "8083:8083"
+    environment:
+      - FLASK_RUN_PORT=8083
+      - LD_PRELOAD=/opt/deception/deception.so
+    volumes:
+      - ../../../bin/mount/deception.so:/opt/deception/deception.so
+      - ../../../bin/mount/honeyaml.yaml:/var/opt/honeyaml.yaml
+
+
+  # TB: locust
+  sut-tb:
+    image: benchmark-tb-locust
+    build:
+      context: ../../../benchmark/test-bench/locust
+      dockerfile: Dockerfile
+    container_name: benchmark-tb-locust
+    ports:
+     - "8089:8089"
+    environment:
+      - FLASK_RUN_PORT=8083
+    volumes:
+      - ../../../bin/mount/benchmark_exports:/opt/locust/cvs_exports

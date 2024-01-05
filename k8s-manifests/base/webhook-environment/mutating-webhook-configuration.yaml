@@ -1,0 +1,26 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: deception-python-webhook
+webhooks:
+  - name: deception-python-webhook.deception.svc.cluster.local
+    admissionReviewVersions:
+      - "v1"
+    sideEffects: "None"
+    timeoutSeconds: 5
+    clientConfig:
+      service:
+        name: deception-python-webhook
+        namespace: deception
+        path: "/add-deception"
+      caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURjRENDQWxpZ0F3SUJBZ0lVWks5TDcyRFVSZzJJTkp6Z3l1MExnNmlaczBBd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1VERUxNQWtHQTFVRUJoTUNRVlF4RFRBTEJnTlZCQWdUQkZkcFpXNHhEVEFMQmdOVkJBY1RCRmRwWlc0eApFREFPQmdOVkJBb1RCME52YlhCaGJua3hFVEFQQmdOVkJBc1RDRkpsYzJWaGNtTm9NQjRYRFRJek1EVXpNVEV3Ck1UTXdNRm9YRFRJNE1EVXlPVEV3TVRNd01Gb3dVREVMTUFrR0ExVUVCaE1DUVZReERUQUxCZ05WQkFnVEJGZHAKWlc0eERUQUxCZ05WQkFjVEJGZHBaVzR4RURBT0JnTlZCQW9UQjBOdmJYQmhibmt4RVRBUEJnTlZCQXNUQ0ZKbApjMlZoY21Ob01JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBdE5zbkJuS2J3Y2pLCkVpZ01rZkg2aG9HZ2o4cGd0dDJsb0w2QTRhdDhNY1dTVXJtSlZYSnVvS3Rxald3c3Z6VGYycmFBRjZDVDBUVkoKQmo2azJsN0NhdWVtSXp6V2Q5VWVuazZ1VTk1ditTZU5IOWVnSDNNaWtSa1h3bzR5eUt0WUhjT2U1MlVjL095agplSnhCRFlJRlRGTmFYdWYwQ2pUbk1kR21nQ1UvcyszbjY5L0lEb3B3M0p4MGJIRjJpRTdhcm5idWlUMGJxcHRxCmcwYmIzR3d2N2Q0UGdUMnJGRXRjODZaSW4vK015bG1xT1ZWNGpKZzUwWDVyblpaZkJNdlVYTUVFUkdqYURPem8KSjlUc05QRmFkcStVMU16a2d6YTIwNG9hZGdac0RqUXlmTXBFczcxbXlnOEZxOEFMZDBQRURmc21OekRScnpRNQpRWHFKQVozZ2Z3SURBUUFCbzBJd1FEQU9CZ05WSFE4QkFmOEVCQU1DQVFZd0R3WURWUjBUQVFIL0JBVXdBd0VCCi96QWRCZ05WSFE0RUZnUVVvdTdqbUdveVVOYkVKVmxkdkFuQndiaXlhWG93RFFZSktvWklodmNOQVFFTEJRQUQKZ2dFQkFJelVvV1BFb3gxUzJYc3B0OFA2NnNLNERHVWZzb0gzMnY1UFpnWTVqNzN2N0Z6TGtiYVpLYmlDUlVDcQpGUjV5RE8rcU13aS9ka1pQNXhuWDhHYkN6ZDRSMURnUWQyejZYZWFwVEJtR2Y1YlNzNVF0V1duaDBPYXN3VWFxCmtRR3ZleEo0NzMraFNORWhtMFBtOCtJelN6T2pDanl2am5TLzhrbGRZT2FXMXNCVGVvNEZhSUVyNDlyU0pIOEQKWE85MFBWWlpkUTdTbUFqU2VzN01zeHJoUDhpVmtubnprK3BVK2xJVXByaGRwOGNMZXIybXBpSStBR0NzRHg0WgpkcWFvcTN0NmVWTjhGMm1pRktGRU5pRHVMcnRsaTZEVHl3RERnU2F6ZCtJN2V1a1BvMmdONitkR0xqc0g2QjVSClQwZ1VTaDk2VzVmeTNWaDllTUFYS2RTRFljST0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: deception-dev
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: ["*"]
+        apiVersions: ["*"]
+        resources: ["pods"]
+        scope: "Namespaced"
+    failurePolicy: Ignore

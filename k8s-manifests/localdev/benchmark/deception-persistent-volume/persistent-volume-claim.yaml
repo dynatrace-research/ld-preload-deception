@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: benchmark-deception-deceiving-resources-volume-claim
+  namespace: benchmark-deception-sut-with
+  labels:
+    app.kubernetes.io/name: deceiving-resources-volume-claim
+    app.kubernetes.io/part-of: benchmark-deception
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 100Mi
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: deceiving-resources-volume
+      app.kubernetes.io/part-of: benchmark-deception

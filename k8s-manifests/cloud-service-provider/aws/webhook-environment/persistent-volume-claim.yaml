@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: deception-persistent-volume-claim
+  namespace: deception-dev
+  labels:
+    app.kubernetes.io/name: persistent-volume-claim
+    app.kubernetes.io/part-of: deception
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "efs-storage-class"
+  resources:
+    requests:
+      storage: 1Mi

@@ -1,0 +1,9 @@
+.*
+
+*.log
+*.csv
+
+node_modules
+
+!./.devcontainer/**
+!./.devcontainer/angular/dist/*

@@ -1,0 +1,56 @@
+apiVersion: skaffold/v3alpha1
+kind: Config
+metadata:
+  name: deception
+build:
+  artifacts:
+    # Building the images with @dockefile within the @context folder
+    - image: benchmark-deception-webhook
+      context: ./src/webhook
+      docker:
+        dockerfile: Dockerfile
+    - image: benchmark-sut-worst-case-java
+      context: ./benchmark/system-under-test/worst-case/java
+      docker:
+        dockerfile: Dockerfile
+    - image: benchmark-sut-worst-case-python
+      context: ./benchmark/system-under-test/worst-case/python
+      docker:
+        dockerfile: Dockerfile
+    - image: benchmark-tb-locust
+      context: ./benchmark/test-bench/locust
+      docker:
+        dockerfile: Dockerfile
+#  local:
+#    # only the docker CLI respects a manually logged-in daemon
+#    useDockerCLI: true
+#    # BuildKit provides an improvement on performance
+#    useBuildkit: true
+deploy:
+  # deploy artifacts using kubectl
+  kubectl:
+    {}
+
+profiles:
+  - name: setup-kind
+    manifests:
+      kustomize:
+        paths:
+          - ./k8s-manifests/base/benchmark/namespace
+          - ./k8s-manifests/base/benchmark/operator
+          - ./k8s-manifests/localdev/benchmark/deception-persistent-volume
+          - ./k8s-manifests/localdev/benchmark/test-bench/locust
+  - name: operator-and-test-bench
+    manifests:
+      kustomize:
+        paths:
+          - ./k8s-manifests/cloud-service-provider/aws/efs-storageclass/efs-storageclass
+          - ./k8s-manifests/base/benchmark/namespace
+          - ./k8s-manifests/base/benchmark/operator
+          - ./k8s-manifests/cloud-service-provider/aws/benchmark/deception-persistent-volume
+          - ./k8s-manifests/cloud-service-provider/aws/benchmark/test-bench/locust
+  - name: deploy-sut
+    manifests:
+      kustomize:
+        paths:
+          - ./k8s-manifests/cloud-service-provider/aws/benchmark/system-under-test/worst-case

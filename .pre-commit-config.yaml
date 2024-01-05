@@ -1,0 +1,42 @@
+repos:
+  # general pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-json
+        exclude: devcontainer.json
+      - id: check-toml
+      - id: check-xml
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: detect-aws-credentials
+        args: [--allow-missing-credentials]
+      - id: detect-private-key
+        exclude: src/webhook/webhook.key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        exclude: ^.*\.csv$
+
+  # license checks
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.4
+    hooks:
+      - id: insert-license
+        name: add license header to c files
+        files: \.[ch]$
+        exclude: ^(third_party\/)|(src\/core\/src\/structs\/yaml.h)
+        args: [--license-filepath, LICENSE_HEADER.txt, --comment-style, "//"]
+      - id: insert-license
+        name: add license header to java files
+        files: \.java$
+        exclude: ^third_party\/
+        args: [--license-filepath, LICENSE_HEADER.txt, --comment-style, "//"]
+      - id: insert-license
+        name: add license header to python files
+        files: \.py$
+        exclude: ^third_party\/
+        args: [--license-filepath, LICENSE_HEADER.txt, --comment-style, "#"]

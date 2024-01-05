@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: benchmark-deception-deceiving-resources-volume
+  labels:
+    app.kubernetes.io/name: deceiving-resources-volume
+    app.kubernetes.io/part-of: benchmark-deception
+spec:
+  capacity:
+    storage: 100Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  hostPath:
+    path: "/opt/deceptionVolume"

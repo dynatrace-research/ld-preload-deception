@@ -1,0 +1,88 @@
+# https://github.com/DescartesResearch/TeaStore/blob/master/examples/docker/docker-compose_default.yaml
+version: '3'
+services:
+  registry:
+    image: descartesresearch/teastore-registry
+    expose:
+      - "8080"
+    environment:
+      LD_PRELOAD: "/opt/deception/deception.so"
+    volumes:
+      - ../../../bin/mount/deception.so:/opt/deception/deception.so
+      - ../../../bin/mount/honeyaml.yaml:/var/opt/honeyaml.yaml
+
+  db:
+    image: descartesresearch/teastore-db
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    environment:
+      LD_PRELOAD: "/opt/deception/deception.so"
+    volumes:
+      - ../../../bin/mount/deception.so:/opt/deception/deception.so
+      - ../../../bin/mount/honeyaml.yaml:/var/opt/honeyaml.yaml
+
+  persistence:
+    image: descartesresearch/teastore-persistence
+    expose:
+      - "8080"
+    environment:
+      HOST_NAME: "persistence"
+      REGISTRY_HOST: "registry"
+      DB_HOST: "db"
+      DB_PORT: "3306"
+      LD_PRELOAD: "/opt/deception/deception.so"
+    volumes:
+      - ../../../bin/mount/deception.so:/opt/deception/deception.so
+      - ../../../bin/mount/honeyaml.yaml:/var/opt/honeyaml.yaml
+
+  auth:
+    image: descartesresearch/teastore-auth
+    expose:
+      - "8080"
+    environment:
+      HOST_NAME: "auth"
+      REGISTRY_HOST: "registry"
+      LD_PRELOAD: "/opt/deception/deception.so"
+    volumes:
+      - ../../../bin/mount/deception.so:/opt/deception/deception.so
+      - ../../../bin/mount/honeyaml.yaml:/var/opt/honeyaml.yaml
+
+  image:
+    image: descartesresearch/teastore-image
+    expose:
+      - "8080"
+    environment:
+      HOST_NAME: "image"
+      REGISTRY_HOST: "registry"
+      LD_PRELOAD: "/opt/deception/deception.so"
+    volumes:
+      - ../../../bin/mount/deception.so:/opt/deception/deception.so
+      - ../../../bin/mount/honeyaml.yaml:/var/opt/honeyaml.yaml
+
+  recommender:
+    image: descartesresearch/teastore-recommender
+    expose:
+      - "8080"
+    environment:
+      HOST_NAME: "recommender"
+      REGISTRY_HOST: "registry"
+      LD_PRELOAD: "/opt/deception/deception.so"
+    volumes:
+      - ../../../bin/mount/deception.so:/opt/deception/deception.so
+      - ../../../bin/mount/honeyaml.yaml:/var/opt/honeyaml.yaml
+
+  webui:
+    image: descartesresearch/teastore-webui
+    expose:
+      - "8080"
+    environment:
+      HOST_NAME: "webui"
+      REGISTRY_HOST: "registry"
+      LD_PRELOAD: "/opt/deception/deception.so"
+    volumes:
+      - ../../../bin/mount/deception.so:/opt/deception/deception.so
+      - ../../../bin/mount/honeyaml.yaml:/var/opt/honeyaml.yaml
+    ports:
+      - "8080:8080"

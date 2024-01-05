@@ -1,0 +1,27 @@
+{
+  "name": "ld-preload-deception",
+  "context": "${localWorkspaceFolder}/.devcontainer",
+  "dockerFile": "${localWorkspaceFolder}/.devcontainer/openjdk17-python3.8-glibc2.31.dockerfile",
+  "runArgs": ["--name", "dev-container-ld-preload-deception"],
+  "appPort": ["8080:8080", "8000:8000", "5000:5000", "5001:5001"],
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/ld-preload-deception,type=bind,consistency=cached",
+  "workspaceFolder": "/workspaces/ld-preload-deception/",
+  "containerEnv": {
+    "LD_PRELOAD": "/workspaces/ld-preload-deception/bin/mount/deception.so"
+  },
+  "overrideCommand": false,
+  "remoteUser": "root",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools-extension-pack",
+        "streetsidesoftware.code-spell-checker",
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder}/bin/mount/deception.log,target=/var/log/deception.log,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/bin/mount/honeyaml.yaml,target=/var/opt/honeyaml.yaml,type=bind,consistency=cached"
+  ]
+}
